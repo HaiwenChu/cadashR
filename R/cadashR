@@ -1,30 +1,53 @@
 #creates dashplot function which takes a data frame with columns "Change", "Level", and "Group"
 #plot has default window xlim=c(-20,20) ylim=(-200,50) but can be customized
-dashplot<-function(dat,xmin=-20,xmax=20,ymin=-200,ymax=50){
-#creates null plot
+#default position is to the left 2, but can be overridden for all textlabels
+#for math38, math11, ela38, or ela11
+dashplot<-function(dat,subj,p=2,xmin=-20,xmax=20,ymin=-200,ymax=50){
+  #sets vertical cut points
+  if (subj=="ela38"){ycut1<--70
+                     ycut2<--5
+                     ycut3<-10
+                     ycut4<-45}
+  if (subj=="ela11"){ycut1<--45
+                     ycut2<-0
+                     ycut3<-30
+                     ycut4<-75}
+  if (subj=="math38"){ycut1<--95
+                      ycut2<--25
+                      ycut3<-0
+                      ycut4<-35}
+  if (subj=="math11"){ycut1<--115
+                      ycut2<--60
+                      ycut3<-0
+                      ycut4<-25}
+  
+  
+  
+  
+  #creates null plot
   plot(NULL,xlim=c(xmin,xmax),ylim=c(ymin,ymax),xlab="Change",ylab="From Standard")
   
-#draws five-color regions [-20,20]x[-200,50]
-  polygon(c(xmin,3,3,xmin),c(-95,-95,ymin,ymin),col="red",border="NA")
-  polygon(c(3,xmax,xmax,3),c(-95,-95,ymin,ymin),col="orange",border="NA")
-  polygon(c(3,xmin,xmin,3),c(-95,-95,-25,-25),col="orange",border="NA")
-  polygon(c(3,xmax,xmax,3),c(-95,-95,-25,-25),col="yellow",border="NA")
-  polygon(c(3,xmin,xmin,3),c(0,0,-25,-25),col="yellow",border="NA")
-  polygon(c(xmin,xmax,xmax,xmin),c(0,0,ymax,ymax),col="green",border="NA")
-  polygon(c(3,xmax,xmax,3),c(-25,-25,0,0),col="green",border="NA") 
-  if(ymax>0){polygon(c(-3,xmax,xmax,-3),c(35,35,ymax,ymax),col="blue",border="NA")}
-  if(xmax>15){polygon(c(15,xmax,xmax,15),c(35,35,0,0),col="blue",border="NA")}
+  #draws five-color regions [-20,20]x[-200,50]
+  polygon(c(xmin,3,3,xmin),c(ycut1,ycut1,ymin,ymin),col="red",border="NA")
+  polygon(c(3,xmax,xmax,3),c(ycut1,ycut1,ymin,ymin),col="orange",border="NA")
+  polygon(c(3,xmin,xmin,3),c(ycut1,ycut1,ycut2,ycut2),col="orange",border="NA")
+  polygon(c(3,xmax,xmax,3),c(ycut1,ycut1,ycut2,ycut2),col="yellow",border="NA")
+  polygon(c(3,xmin,xmin,3),c(ycut3,ycut3,ycut2,ycut2),col="yellow",border="NA")
+  polygon(c(xmin,xmax,xmax,xmin),c(ycut3,ycut3,ymax,ymax),col="green",border="NA")
+  polygon(c(3,xmax,xmax,3),c(ycut2,ycut2,ycut3,ycut3),col="green",border="NA") 
+  if(ymax>ycut3){polygon(c(-3,xmax,xmax,-3),c(ycut4,ycut4,ymax,ymax),col="blue",border="NA")}
+  if(xmax>15){polygon(c(15,xmax,xmax,15),c(ycut4,ycut4,ycut3,ycut3),col="blue",border="NA")}
   
-#draws boundaries
+  #draws boundaries
   abline(v=-15)
   abline(v=-3)
   abline(v=3)
   abline(v=15)
-  abline(h=-95)
-  abline(h=-25)
-  abline(h=0)
-  abline(h=35)
+  abline(h=ycut1)
+  abline(h=ycut2)
+  abline(h=ycut3)
+  abline(h=ycut4)
   
   points(dat$Change, dat$Level,pch=19,col="black")
-  text(dat$Change, dat$Level,labels=dat$Group, cex= 0.7, pos = 2)
+  text(dat$Change, dat$Level,labels=dat$Group, cex= 0.7, pos = p)
 }
