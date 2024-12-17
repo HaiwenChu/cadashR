@@ -2,6 +2,8 @@
 #plot has default window xlim=c(-20,20) ylim=(-200,50) but can be customized
 #default position is to the left 2, but can be overridden for all textlabels
 #for math38, math11, ela38, or ela11
+#scales sizes of point to reflect size of group, lists group size on the opposite side from label
+
 dashplot<-function(dat,subj,p=2,xmin=-20,xmax=20,ymin=-200,ymax=50){
   #sets vertical cut points
   if (subj=="ela38"){ycut1<--70
@@ -49,5 +51,6 @@ dashplot<-function(dat,subj,p=2,xmin=-20,xmax=20,ymin=-200,ymax=50){
   abline(h=ycut4)
   
   points(dat$Change, dat$Level,pch=19,col="black")
-  text(dat$Change, dat$Level,labels=dat$Group, cex= 0.7, pos = p)
+  text(dat$Change, dat$Level,labels=dat$Group, cex= dat$n/median(dat$n), pos = p)
+  text(dat$Change,dat$Level,labels=dat$n,cex=0.7,pos=p+2)
 }
