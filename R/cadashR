@@ -1,8 +1,8 @@
-#creates dashplot function which takes a data frame with columns "Change", "Level", and "Group"
-#plot has default window xlim=c(-20,20) ylim=(-200,50) but can be customized
-#default position is to the left 2, but can be overridden for all textlabels
-#for math38, math11, ela38, or ela11
-#scales sizes of point to reflect size of group, lists group size on the opposite side from label
+# creates dashplot function which takes a data frame with columns "Group", "Change", "Level", and "n"
+# plot has default window xlim=c(-20,20) ylim=c(-200,50) but can be customized to match empirical ranges
+# default position is to the left 2, but can be overridden for all textlabels
+# subjects are: "math38", "math11", "ela38", or "ela11"
+# scales sizes of point to reflect size of group, lists group size on the opposite side from label
 
 dashplot<-function(dat,subj,p=2,xmin=-20,xmax=20,ymin=-200,ymax=50){
   #sets vertical cut points
@@ -22,14 +22,13 @@ dashplot<-function(dat,subj,p=2,xmin=-20,xmax=20,ymin=-200,ymax=50){
                       ycut2<--60
                       ycut3<-0
                       ycut4<-25}
+ 
   
+  # creates null plot with appropriate window
+  plot(NULL,xlim=c(xmin,xmax),ylim=c(ymin,ymax),
+            xlab="Change",ylab="From Standard")
   
-  
-  
-  #creates null plot
-  plot(NULL,xlim=c(xmin,xmax),ylim=c(ymin,ymax),xlab="Change",ylab="From Standard")
-  
-  #draws five-color regions [-20,20]x[-200,50]
+  #draws five-color regions
   polygon(c(xmin,3,3,xmin),c(ycut1,ycut1,ymin,ymin),col="red",border="NA")
   polygon(c(3,xmax,xmax,3),c(ycut1,ycut1,ymin,ymin),col="orange",border="NA")
   polygon(c(3,xmin,xmin,3),c(ycut1,ycut1,ycut2,ycut2),col="orange",border="NA")
@@ -50,7 +49,7 @@ dashplot<-function(dat,subj,p=2,xmin=-20,xmax=20,ymin=-200,ymax=50){
   abline(h=ycut3)
   abline(h=ycut4)
   
-  points(dat$Change, dat$Level,pch=19,col="black")
-  text(dat$Change, dat$Level,labels=dat$Group, cex= dat$n/median(dat$n), pos = p)
+  points(dat$Change, dat$Level,pch=19,col="black",cex=dat$n/median(dat$n))
+  text(dat$Change,dat$Level,labels=dat$Group,pos=p)
   text(dat$Change,dat$Level,labels=dat$n,cex=0.7,pos=p+2)
 }
